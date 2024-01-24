@@ -9,8 +9,9 @@ window.onload = function() {
 }
 
 /**
- * Setting up the grid when the game starts
- * by creating the HTML elements
+ * Setting up the grid after the page is loaded
+ * by visualy creating the HTML elements 
+ * and recors each cell based on its position in the grid.
  */
 function setGame() {
     grid = [];
@@ -18,10 +19,10 @@ function setGame() {
     for (let r=0; r < rows; r++) {
         let row = [];
         for (let c = 0; c < columns; c++) {
-            //JS 
+            //JS creates a placeholder
             row.push('');
 
-            //HTML
+            //HTML creates a visual representation of the elements on the webpage
             let cell = document.createElement("div");
             cell.id = r.toString() + "-" + c.toString();
             cell.classList.add("cell");
