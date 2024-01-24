@@ -1,21 +1,27 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
+    margin: 0;
 }
 
 #grid {
-    height: 320px;
-    width: 320px;
-    background-color: grey;
+    height: 315px;
+    width: 315px;
+    background-color: lightgray;
+
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
 }
 
-.square {
-    height: 32px;
-    width: 32px;
-    border: 1px solid black;
+#grid div {
+    height: 33px;
+    width: 33px;
+    border: 1px solid whitesmoke;
     
+    /*style text inside the div*/
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
