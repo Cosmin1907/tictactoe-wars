@@ -21,7 +21,7 @@ body {
     
     /*style text inside the div*/
     font-size: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
 }

@@ -22,12 +22,13 @@ function setGame() {
             row.push('');
 
             //HTML
-            let square = document.createElement("div");
-            square.id = r.toString() + "-" + c.toString();
-            square.classList.add("square");
-            document.getElementById("grid").append(square);
+            let cell = document.createElement("div");
+            cell.id = r.toString() + "-" + c.toString();
+            cell.classList.add("cell");
+            document.getElementById("grid").append(cell);
         }
         grid.push(row);
     }
 }
+
 
