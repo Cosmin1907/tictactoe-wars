@@ -14,7 +14,6 @@ window.onload = function () {
  * and recors each cell based on its position in the grid.
  */
 function setGame() {
-    console.log('Setting up the game...');
     grid = [];
 
     for (let r = 0; r < rows; r++) {
@@ -45,7 +44,6 @@ const aiPlayer = "X";
  * and initiates turnClick function
  */
 function startGame() {
-    console.log("I am running");
     document.querySelector(".endgame").style.display = "none";
     origBoard = Array.from(Array(81).keys());
     let cells = document.querySelectorAll(".cell");
@@ -55,12 +53,42 @@ function startGame() {
         cells[i].addEventListener("click", turnClick, false);
     }
 
-    console.log(cells);
 }
 
+/**
+ * Gets triggered when a user clicks on a game square
+ * Pases the information about which square was clicked 
+ * and which player made the move.
+ */
+function turnClick(square) {
+    turn(square.target.id, huPlayer)
+}
 
+/**
+ * After a move is made, it checks if the player has won, 
+ * and if so, it initiates the end-of-game process.
+ */
+function turn(squareId, player) {
+    origBoard[squareId] = player;
+    document.getElementById(squareId).innerText = player;
+    checkWinner();
+}
 
-function turnClick(event) {
-    console.log(event.target.id);
+function checkWinner() {
+    //horizontally 
+    for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < columns - 3; c++) {
+            if (grid[r][c] != '') {
+                if (grid[r][c] === grid[r][c+1] && 
+                    grid[r][c+1] === grid[r][c+2] && 
+                    grid[r][c+2] === grid[r][c+3]) {
+
+                    console.log("Player " + grid[r][c] + " wins!");
+                    return;
+                }
+            }
+        }
+    }
+    console.log("No winner yet.");
 }
 
