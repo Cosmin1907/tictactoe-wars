@@ -4,9 +4,9 @@ let grid;
 let rows = 9;
 let columns = 9;
 
-window.onload = function() {
+window.onload = function () {
     setGame();
-}
+};
 
 /**
  * Setting up the grid after the page is loaded
@@ -16,7 +16,7 @@ window.onload = function() {
 function setGame() {
     grid = [];
 
-    for (let r=0; r < rows; r++) {
+    for (let r = 0; r < rows; r++) {
         let row = [];
         for (let c = 0; c < columns; c++) {
             //JS creates a placeholder
@@ -32,4 +32,27 @@ function setGame() {
     }
 }
 
+let origBoard;
+const huPlayer = "0";
+const aiPlayer = "X";
+
+let cells = document.querySelectorAll(".cell");
+startGame();
+
+/**
+ * Resets the game to the initial state
+ */
+function startGame() {
+    document.querySelector(".endgame").style.display = "none";
+    origBoard = Array.from(Array(81).keys());
+    for (let i = 0; i < cells.length; i++) {
+        cells[i].innerText = '';
+        cells[i].style.removeProperty("background-color");
+        cells[i].addEventListener("click", turnClick, false);
+    }
+}
+
+function turnClick(event) {
+    console.log(event.target.id);
+}
 
