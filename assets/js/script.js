@@ -11,7 +11,7 @@ window.onload = function () {
 /**
  * Setting up the grid after the page is loaded
  * by visualy creating the HTML elements 
- * and recors each cell based on its position in the grid.
+ * and records each cell based on its position in the grid.
  */
 function setGame() {
     grid = [];
@@ -64,31 +64,81 @@ function turnClick(square) {
     turn(square.target.id, huPlayer)
 }
 
+
+function turn(squareId, player) {
+    console.log("I am clicking")
+    origBoard[squareId] = player;
+    document.getElementById(squareId).innerText = player;
+
+    let coords = squareId.split("-");
+    let r = parseInt(coords[0]);
+    let c = parseInt(coords[1]);
+
+    grid[r][c] = huPlayer;
+
+    checkWinner();
+}
+
+
 /**
  * After a move is made, it checks if the player has won, 
  * and if so, it initiates the end-of-game process.
  */
-function turn(squareId, player) {
-    origBoard[squareId] = player;
-    document.getElementById(squareId).innerText = player;
-    checkWinner();
-}
-
 function checkWinner() {
+
+    console.log("I am checking")
+    console.log(grid);
+    console.log(origBoard);
+
     //horizontally 
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns - 3; c++) {
             if (grid[r][c] != '') {
-                if (grid[r][c] === grid[r][c+1] && 
-                    grid[r][c+1] === grid[r][c+2] && 
-                    grid[r][c+2] === grid[r][c+3]) {
-
-                    console.log("Player " + grid[r][c] + " wins!");
+                if (grid[r][c] == grid[r][c+1] && grid[r][c+1] == grid[r][c+2] && grid[r][c+2] == grid[r][c+3]) {
+                    console.log("Winner Found horizontally")
                     return;
                 }
             }
         }
     }
-    console.log("No winner yet.");
+
+    //vertically 
+    for (let c = 0; c < columns; c++) {
+        for (let r = 0; r < rows - 3; r++) {
+            if (grid[r][c] != '') {
+                if (grid[r][c] == grid[r+1][c] && grid[r+1][c] == grid[r+2][c] && grid[r+2][c] == grid[r+3][c]) {
+                    console.log("Winner found vertically")
+                    return;
+                }
+            }
+        }
+    }
+
+    //anti diagonally
+    for (let r = 0; r < rows - 3; r++) {
+        for (let c = 0; c < columns - 3; c++){
+            if (grid[r][c] != '') {
+                if (grid[r][c] == grid[r+1][c+1] && grid[r+1][c+1] == grid[r+2][c+2] && grid[r+2][c+2] == grid[r+3][c+3]) {
+                    console.log("Winner found anti diagonally", r, c)
+                    return;
+                }
+            }
+        }
+    }
+
+    //diagonally 
+    for (let r = 3; r < rows; r++) {
+        for (let c = 0; c < columns - 3; c++) {
+            if (grid[r][c] != '') {
+                if (grid[r][c] == grid[r-1][c+1] && grid[r-1][c+1] == grid[r-2][c+2] && grid[r-2][c+2] == grid[r-3][c+3]) {
+                    console.log("Winner found diagonally", r, c)
+                    return;
+                }
+            }
+        }
+    }
+
 }
+
+
 
