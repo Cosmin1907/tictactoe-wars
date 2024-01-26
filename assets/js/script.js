@@ -62,6 +62,8 @@ function startGame() {
  */
 function turnClick(square) {
     turn(square.target.id, huPlayer)
+    if (!checkTie()) turn(bestSpot(), aiPlayer);
+    
 }
 
 
@@ -96,6 +98,7 @@ function checkWinner() {
             if (grid[r][c] != '') {
                 if (grid[r][c] == grid[r][c+1] && grid[r][c+1] == grid[r][c+2] && grid[r][c+2] == grid[r][c+3]) {
                     console.log("Winner Found horizontally")
+                    gameOver();
                     return;
                 }
             }
@@ -108,6 +111,7 @@ function checkWinner() {
             if (grid[r][c] != '') {
                 if (grid[r][c] == grid[r+1][c] && grid[r+1][c] == grid[r+2][c] && grid[r+2][c] == grid[r+3][c]) {
                     console.log("Winner found vertically")
+                    gameOver();
                     return;
                 }
             }
@@ -120,10 +124,12 @@ function checkWinner() {
             if (grid[r][c] != '') {
                 if (grid[r][c] == grid[r+1][c+1] && grid[r+1][c+1] == grid[r+2][c+2] && grid[r+2][c+2] == grid[r+3][c+3]) {
                     console.log("Winner found anti diagonally", r, c)
+                    gameOver();
                     return;
                 }
             }
         }
+        
     }
 
     //diagonally 
@@ -132,13 +138,44 @@ function checkWinner() {
             if (grid[r][c] != '') {
                 if (grid[r][c] == grid[r-1][c+1] && grid[r-1][c+1] == grid[r-2][c+2] && grid[r-2][c+2] == grid[r-3][c+3]) {
                     console.log("Winner found diagonally", r, c)
+                    gameOver();
                     return;
                 }
             }
         }
+        
     }
 
 }
 
+function gameOver() {
+    declareWinner();
+}
+
+function declareWinner(who) {
+    document.querySelector(".endgame").style.display = "block";
+    document.querySelector(".endgame .text").innerText = who;
+
+}
+
+function emptySquares() {
+    return origBoard.filter(s => typeof s == "number");
+}
+
+function bestSpot() {
+    return emptySquares()[0];
+}
+
+function checkTie() {
+    if (emptySquares().length == 0) {
+        for (let i = 0; i < cells.length; i++) {
+            cells[i].style.backroundColor = "green";
+            cells[i].removeEventListener('click', turnClick, false);
+        }
+        declareWinner("Tie Game!");
+        return true;
+    }
+    return false;
+}
 
 
