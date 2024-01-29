@@ -61,8 +61,7 @@ function startGame() {
  * and which player made the move.
  */
 function turnClick(square) {
-    console.log(origBoard);
-    console.log(grid);
+    
     console.log("Turn Clicked:", square.target.id);
 
     // Extract the row and column from the square's id (in the format "row-column")
