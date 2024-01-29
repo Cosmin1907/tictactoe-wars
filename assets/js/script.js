@@ -61,33 +61,50 @@ function startGame() {
  * and which player made the move.
  */
 function turnClick(square) {
-    
+    console.log(origBoard);
+    console.log(grid);
     console.log("Turn Clicked:", square.target.id);
 
+    // Extract the row and column from the square's id (in the format "row-column")
     let coords = square.target.id.split("-");
     let row = parseInt(coords[0]);
     let col = parseInt(coords[1]);
 
+    // Check if the corresponding element in origBoard is a number
     if (typeof origBoard[row * 9 + col] == 'number') {
+        // Call the turn function with the correct index in origBoard and huPlayer
         turn(row * 9 + col, huPlayer);
+        
+        // If the game is not tied, let the AI take its turn
         if (!checkTie()) turn(bestSpot(), aiPlayer);
     }
 }
 
+/**
+ * Dynamically selects the HTML element corresponding to the clicked square on the board 
+ * Updates its text content to display the player's symbol
+ */
 function turn(squareId, player) {
-    console.log("I am clicking");
+    // Mark the selected square with the player's symbol in origBoard
     origBoard[squareId] = player;
 
-    // Assuming squareId is a number representing the index in origBoard
+    // Set the inner text of the corresponding HTML element with the player's symbol
     document.getElementById(`${Math.floor(squareId / 9)}-${squareId % 9}`).innerText = player;
 
+    // Calculate the row and column from the squareId
     let row = Math.floor(squareId / 9);
     let col = squareId % 9;
 
+    // Update the corresponding element in the grid with the player's symbol
     grid[row][col] = player;
 
+    let gameWon = checkWinner(origBoard, player);
+    if (gameWon) gameOver(gameWon);
+
+    // Check if there's a winner after the move
     checkWinner();
 }
+
 
 
 
@@ -107,7 +124,7 @@ function checkWinner() {
             if (grid[r][c] != '') {
                 if (grid[r][c] == grid[r][c + 1] && grid[r][c + 1] == grid[r][c + 2] && grid[r][c + 2] == grid[r][c + 3]) {
                     console.log("Winner Found horizontally")
-                    gameOver();
+                    gameOver(r, c);
                     return;
                 }
             }
@@ -120,7 +137,7 @@ function checkWinner() {
             if (grid[r][c] != '') {
                 if (grid[r][c] == grid[r + 1][c] && grid[r + 1][c] == grid[r + 2][c] && grid[r + 2][c] == grid[r + 3][c]) {
                     console.log("Winner found vertically")
-                    gameOver();
+                    gameOver(r, c);
                     return;
                 }
             }
@@ -133,7 +150,7 @@ function checkWinner() {
             if (grid[r][c] != '') {
                 if (grid[r][c] == grid[r + 1][c + 1] && grid[r + 1][c + 1] == grid[r + 2][c + 2] && grid[r + 2][c + 2] == grid[r + 3][c + 3]) {
                     console.log("Winner found anti diagonally", r, c)
-                    gameOver();
+                    gameOver(r, c);
                     return;
                 }
             }
@@ -147,7 +164,7 @@ function checkWinner() {
             if (grid[r][c] != '') {
                 if (grid[r][c] == grid[r - 1][c + 1] && grid[r - 1][c + 1] == grid[r - 2][c + 2] && grid[r - 2][c + 2] == grid[r - 3][c + 3]) {
                     console.log("Winner found diagonally", r, c)
-                    gameOver();
+                    gameOver(r, c);
                     return;
                 }
             }
@@ -157,9 +174,22 @@ function checkWinner() {
 
 }
 
-function gameOver() {
-    declareWinner();
+
+
+function gameOver(r, c) {
+    let cells = document.querySelectorAll(".cell");
+
+    if (grid[r][c] == huPlayer) {
+        declareWinner("You win!");
+    } else {
+        declareWinner("You lose!");
+    }
+
+    for (let i = 0; i < cells.length; i++) {
+        cells[i].removeEventListener('click', turnClick, false);
+    }
 }
+
 
 function declareWinner(who) {
     document.querySelector(".endgame").style.display = "block";
