@@ -35,7 +35,7 @@ function setGame() {
 }
 
 let origBoard;
-const huPlayer = "0";
+const huPlayer = "O";
 const aiPlayer = "X";
 
 
@@ -61,25 +61,34 @@ function startGame() {
  * and which player made the move.
  */
 function turnClick(square) {
-    turn(square.target.id, huPlayer)
-    if (!checkTie()) turn(bestSpot(), aiPlayer);
     
+    console.log("Turn Clicked:", square.target.id);
+
+    let coords = square.target.id.split("-");
+    let row = parseInt(coords[0]);
+    let col = parseInt(coords[1]);
+
+    if (typeof origBoard[row * 9 + col] == 'number') {
+        turn(row * 9 + col, huPlayer);
+        if (!checkTie()) turn(bestSpot(), aiPlayer);
+    }
 }
 
-
 function turn(squareId, player) {
-    console.log("I am clicking")
+    console.log("I am clicking");
     origBoard[squareId] = player;
-    document.getElementById(squareId).innerText = player;
 
-    let coords = squareId.split("-");
-    let r = parseInt(coords[0]);
-    let c = parseInt(coords[1]);
+    // Assuming squareId is a number representing the index in origBoard
+    document.getElementById(`${Math.floor(squareId / 9)}-${squareId % 9}`).innerText = player;
 
-    grid[r][c] = huPlayer;
+    let row = Math.floor(squareId / 9);
+    let col = squareId % 9;
+
+    grid[row][col] = player;
 
     checkWinner();
 }
+
 
 
 /**
@@ -96,7 +105,7 @@ function checkWinner() {
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns - 3; c++) {
             if (grid[r][c] != '') {
-                if (grid[r][c] == grid[r][c+1] && grid[r][c+1] == grid[r][c+2] && grid[r][c+2] == grid[r][c+3]) {
+                if (grid[r][c] == grid[r][c + 1] && grid[r][c + 1] == grid[r][c + 2] && grid[r][c + 2] == grid[r][c + 3]) {
                     console.log("Winner Found horizontally")
                     gameOver();
                     return;
@@ -109,7 +118,7 @@ function checkWinner() {
     for (let c = 0; c < columns; c++) {
         for (let r = 0; r < rows - 3; r++) {
             if (grid[r][c] != '') {
-                if (grid[r][c] == grid[r+1][c] && grid[r+1][c] == grid[r+2][c] && grid[r+2][c] == grid[r+3][c]) {
+                if (grid[r][c] == grid[r + 1][c] && grid[r + 1][c] == grid[r + 2][c] && grid[r + 2][c] == grid[r + 3][c]) {
                     console.log("Winner found vertically")
                     gameOver();
                     return;
@@ -120,30 +129,30 @@ function checkWinner() {
 
     //anti diagonally
     for (let r = 0; r < rows - 3; r++) {
-        for (let c = 0; c < columns - 3; c++){
+        for (let c = 0; c < columns - 3; c++) {
             if (grid[r][c] != '') {
-                if (grid[r][c] == grid[r+1][c+1] && grid[r+1][c+1] == grid[r+2][c+2] && grid[r+2][c+2] == grid[r+3][c+3]) {
+                if (grid[r][c] == grid[r + 1][c + 1] && grid[r + 1][c + 1] == grid[r + 2][c + 2] && grid[r + 2][c + 2] == grid[r + 3][c + 3]) {
                     console.log("Winner found anti diagonally", r, c)
                     gameOver();
                     return;
                 }
             }
         }
-        
+
     }
 
     //diagonally 
     for (let r = 3; r < rows; r++) {
         for (let c = 0; c < columns - 3; c++) {
             if (grid[r][c] != '') {
-                if (grid[r][c] == grid[r-1][c+1] && grid[r-1][c+1] == grid[r-2][c+2] && grid[r-2][c+2] == grid[r-3][c+3]) {
+                if (grid[r][c] == grid[r - 1][c + 1] && grid[r - 1][c + 1] == grid[r - 2][c + 2] && grid[r - 2][c + 2] == grid[r - 3][c + 3]) {
                     console.log("Winner found diagonally", r, c)
                     gameOver();
                     return;
                 }
             }
         }
-        
+
     }
 
 }
@@ -159,7 +168,7 @@ function declareWinner(who) {
 }
 
 function emptySquares() {
-    return origBoard.filter(s => typeof s == "number");
+	return origBoard.filter(s => typeof s == 'number');
 }
 
 function bestSpot() {
@@ -167,9 +176,10 @@ function bestSpot() {
 }
 
 function checkTie() {
+    let cells = document.querySelectorAll(".cell");
     if (emptySquares().length == 0) {
         for (let i = 0; i < cells.length; i++) {
-            cells[i].style.backroundColor = "green";
+            cells[i].style.backgroundColor = "green";
             cells[i].removeEventListener('click', turnClick, false);
         }
         declareWinner("Tie Game!");
