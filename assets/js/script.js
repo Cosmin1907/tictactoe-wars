@@ -14,6 +14,9 @@ window.onload = function () {
  * and records each cell based on its position in the grid.
  */
 function setGame() {
+    // Clear existing grid
+    document.getElementById("grid").innerHTML = "";
+
     grid = [];
 
     for (let r = 0; r < rows; r++) {
