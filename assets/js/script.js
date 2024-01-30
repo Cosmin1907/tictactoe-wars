@@ -247,6 +247,9 @@ function minimax (newBoard, player) {
             move.score = result.score; 
         }
 
+        // Evaluate the board 
+        move.score = evaluateBoard(newBoard, player);
+
         newBoard[availSpots[i]] = move.index;
 
         moves.push(move);
@@ -275,4 +278,14 @@ function minimax (newBoard, player) {
 
 }
 
+function evaluateBoard(board, player) {
+    // Count the occurrences of the player's symbol in the current board state
+    let count = 0;
+    for (let i = 0; i < board.length; i++) {
+        if (board[i] === player) {
+            count++;
+        }
+    }
+    return count;
+}
 
